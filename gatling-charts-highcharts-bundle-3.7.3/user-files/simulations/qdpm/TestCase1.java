@@ -13,8 +13,6 @@ import static io.gatling.javaapi.jdbc.JdbcDsl.*;
 
 public class TestCase1 extends Simulation {
 
-  val csvFeederLoginDetails = csv("qdpm/loginDetails.csv").circular;
-
   private HttpProtocolBuilder httpProtocol = http
     .baseUrl("http://localhost")
     .inferHtmlResources(AllowList(), DenyList(".*\\.js", ".*\\.css", ".*\\.gif", ".*\\.jpeg", ".*\\.jpg", ".*\\.ico", ".*\\.woff", ".*\\.woff2", ".*\\.(t|o)tf", ".*\\.png", ".*detectportal\\.firefox\\.com.*"))
@@ -77,6 +75,6 @@ public class TestCase1 extends Simulation {
     );
 
   {
-	  setUp(scn.injectOpen(atOnceUsers(20))).protocols(httpProtocol);
+	  setUp(scn.injectOpen(atOnceUsers(20))).protocols(httpProtocol); // Injects 20 number of users at once.
   }
 }

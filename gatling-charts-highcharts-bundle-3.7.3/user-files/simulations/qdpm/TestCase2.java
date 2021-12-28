@@ -75,6 +75,6 @@ public class TestCase2 extends Simulation {
     );
 
   {
-	  setUp(scn.injectOpen(rampUsers(20).during(10))).protocols(httpProtocol);
+	  setUp(scn.injectOpen(rampUsers(20).during(10))).protocols(httpProtocol); //  Injects 20 number of users distributed evenly on a time window of a given duration.
   }
 }

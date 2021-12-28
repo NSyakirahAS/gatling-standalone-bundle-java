@@ -77,13 +77,13 @@ public class TestCase3 extends Simulation {
   {
     setUp(
       scn.injectOpen(
-        nothingFor(4), // 1
-        atOnceUsers(10), // 2
-        rampUsers(10).during(5), // 3
-        constantUsersPerSec(20).during(15), // 4
-        constantUsersPerSec(20).during(15).randomized(), // 5
-        rampUsersPerSec(10).to(20).during(10), // 6
-        stressPeakUsers(100).during(20) // 7
+        nothingFor(4), // 1 Pause for 4 sec
+        atOnceUsers(10), // 2 Inject 10 number of users at once
+        rampUsers(10).during(5), // 3 Inject 20 number of users distributed evenly on a time window of a given duration.
+        constantUsersPerSec(20).during(15), // 4 Injects users at a constant rate, defined in users per second, during a given duration. Users will be injected at regular intervals.
+        constantUsersPerSec(20).during(15).randomized(), // 5 Injects users at a constant rate, defined in users per second, during a given duration. Users will be injected at randomized intervals.
+        rampUsersPerSec(10).to(20).during(10), // 6 Injects users from starting rate to target rate, defined in users per second, during a given duration. Users will be injected at regular intervals.
+        stressPeakUsers(100).during(20) // 7  Injects 100 number of users following a smooth approximation of the heaviside step function stretched to a given duration.
   ).protocols(httpProtocol)
 );
   }

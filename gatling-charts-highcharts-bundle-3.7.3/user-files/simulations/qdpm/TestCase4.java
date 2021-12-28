@@ -78,8 +78,8 @@ public class TestCase4 extends Simulation {
   {
     setUp(
   scn.injectClosed(
-    constantConcurrentUsers(10).during(10), // 1
-    rampConcurrentUsers(10).to(20).during(10) // 2
+    constantConcurrentUsers(10).during(10), // 1 Inject so that number of concurrent users in the system is constant
+    rampConcurrentUsers(10).to(20).during(10) // 2 Inject so that number of concurrent users in the system ramps linearly from a number to another
   ).protocols(httpProtocol)
 );
   }
