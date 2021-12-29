@@ -102,9 +102,9 @@ ChainBuilder logout =
   {
     {
   setUp(
-    admin.injectOpen(rampUsers(10).during(10)),
-    manager.injectOpen(rampUsers(2).during(10)),
-    client.injectOpen(rampUsers(10).during(10))
+    admin.injectOpen(rampUsers(10).during(10)), // inject 10 users over 10 seconds
+    manager.injectOpen(rampUsers(2).during(10)), // inject 2 users over 10 seconds
+    client.injectOpen(rampUsers(10).during(10)) // inject 10 users over 10 seconds
   ).protocols(httpProtocol);
 }
   }
