@@ -13,6 +13,7 @@ import static io.gatling.javaapi.jdbc.JdbcDsl.*;
 
 public class TestCase4 extends Simulation {
 
+  // 1 HTTP Protocol setup
   private HttpProtocolBuilder httpProtocol = http
     .baseUrl("http://localhost")
     .inferHtmlResources(AllowList(), DenyList(".*\\.js", ".*\\.css", ".*\\.gif", ".*\\.jpeg", ".*\\.jpg", ".*\\.ico", ".*\\.woff", ".*\\.woff2", ".*\\.(t|o)tf", ".*\\.png", ".*detectportal\\.firefox\\.com.*"))
@@ -35,49 +36,55 @@ public class TestCase4 extends Simulation {
   );
 
 
+  FeederBuilder.Batchable<String> loginDetails =
+    csv("qdpm/loginDetails.csv").random();
 
-  private ScenarioBuilder scn = scenario("TestCase4")
-    // redirect
-    .exec(
-      http("Load login page")
-        .get("/qdpm/index.php/")
-        .headers(headers_0)
-    )
-    .pause(34)
-    // userlogin
+  // 2 Scenario definition
+  ChainBuilder userLogin =
+    feed(loginDetails)
     .exec(
       http("User login")
         .post("/qdpm/index.php/login")
         .headers(headers_1)
-        .formParam("login[email]", "syakirah.asata@gmail.com")
-        .formParam("login[password]", "p@ssw0rd")
+        .formParam("username", "#{username}")
+        .formParam("password", "#{password}")
+        .formParam("user_group", "#{user_group}")
         .formParam("http_referer", "http://localhost/qdpm/index.php/")
     )
-    .pause(19)
-    // view project
-    .exec(
+    .pause(19);
+
+    ChainBuilder viewProject =
+      exec(
       http("Load all projects page")
         .get("/qdpm/index.php/projects")
         .headers(headers_0)
     )
-    .pause(23)
-    // edit gatling project
-    .exec(
+    .pause(23);
+
+    ChainBuilder editProject =
+      exec(
       http("Load specific project page")
         .get("/qdpm/index.php/projects/edit/id/10")
         .headers(headers_2)
     )
-    .pause(41)
-    // user logout
-    .exec(
+    .pause(41);
+
+    ChainBuilder logout =
+      exec(
       http("User logout")
         .get("/qdpm/index.php/login/logoff")
         .headers(headers_0)
     );
 
+  private ScenarioBuilder scn = scenario("TestCase4")
+    .exec(userLogin,viewProject,editProject,logout);
+
+
+
+    // 3 Load simulation design
   {
     setUp(
-  scn.injectClosed(
+    scn.injectClosed(
     constantConcurrentUsers(10).during(10), // 1 Inject so that number of concurrent users in the system is constant
     rampConcurrentUsers(10).to(20).during(10) // 2 Inject so that number of concurrent users in the system ramps linearly from a number to another
   ).protocols(httpProtocol)

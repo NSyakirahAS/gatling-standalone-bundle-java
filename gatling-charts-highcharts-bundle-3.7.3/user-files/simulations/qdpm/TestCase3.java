@@ -48,7 +48,7 @@ public class TestCase3 extends Simulation {
       http("User login")
         .post("/qdpm/index.php/login")
         .headers(headers_1)
-        .formParam("login[email]", "syakirah.asata@gmail.com")
+        .formParam("login[email]", "admin1@yahoo.com")
         .formParam("login[password]", "p@ssw0rd")
         .formParam("http_referer", "http://localhost/qdpm/index.php/")
     )

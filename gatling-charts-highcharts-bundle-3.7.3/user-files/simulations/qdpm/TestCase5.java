@@ -36,23 +36,13 @@ public class TestCase5 extends Simulation {
     Map.entry("X-Requested-With", "XMLHttpRequest")
   );
 
-  FeederBuilder.Batchable<String> loginFeeder =
-  csv("loginDetails.csv").circular();
-
-  FeederBuilder.Batchable<String> feed =
-  csv("clientDetails.csv").random();
+  FeederBuilder.FileBased<Object> jsonLoginFeeder =
+  jsonFile("qdpm/loginDetails.json").circular();
 
 
 // 2 Scenario definition
-ChainBuilder login =
-  exec(
-    http("Load login page")
-    .get("/qdpm/index.php")
-    .headers(headers_0))
-  .pause(34);
-
  ChainBuilder userLogin = 
- feed(loginFeeder)
+ feed(jsonLoginFeeder)
   .exec(
     http("User login")
     .post("/qdpm/index.php/login")
@@ -89,13 +79,13 @@ ChainBuilder logout =
 
 
   private ScenarioBuilder admin = scenario("Admin")
-    .exec(login, userLogin, viewProject, editProject, logout);
+    .exec(userLogin, viewProject, editProject, logout);
 
   private ScenarioBuilder manager = scenario("Manager")
-    .exec(login, userLogin, viewProject, logout);
+    .exec(userLogin, viewProject, logout);
 
   private ScenarioBuilder client = scenario("Client")
-    .exec(login, userLogin, logout);
+    .exec(userLogin, logout);
 
 
   // 3 Load simulation design
